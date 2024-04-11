@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  box-sizing: border-box !important;
+}
+
 input {
   all: unset;
 }
@@ -27,17 +31,15 @@ a:hover {
 }
 
 body > div {
-  height: 40em;
+  height: 100%;
 }
 
 body {
   margin: 0;
   display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
   justify-content: center;
-  align-items: center;
   gap: 2em;
 }
 
@@ -84,6 +86,19 @@ input:focus {
 .toggle {
   position: fixed;
   top: 3em;
-  left: 50%;
+  left: 75%;
   transform: translateX(-50%);
+}
+
+.newTodo {
+  display: flex;
+  gap: 1em;
+}
+
+.todosTable {
+  padding: 2em 0;
+}
+
+.todo {
+  padding-bottom: 2em;
 }

@@ -64,17 +64,12 @@ export const buildTodosMachine = (todoMachine: TodoMachine) =>
       "Reset new todo's label": assign({
         newTodoLabel: "",
       }),
-      "React to todo addition": () => {},
-      "React to new todo update": () => {},
-      "React to todo deletion": (_, _todoId: string) => {},
-      "React to enter DISABLED": () => {},
-      "React to enter ENABLED": () => {},
     },
     actors: {
       todoMachine,
     },
   }).createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QBUDyARVBlAdAUQDkBBAIQBk90BidAS1gEMAjAGzAG0AGAXUVAAcA9rFoAXWoIB2fEAA9EAJgCcARhwqFAZgBsAFk4qVmpQA5OnbQBoQAT0QBWIznudN9gOwnNR+5ve6AXwDrNExcQlIKagBVfggGUTAAAkkwAHck0UEIQQByWCSWZjAWLl4kECERcSkZeQQAWhVHHG1DUxNtJT9tdxUrW0Rde3scbpMJrt0Vd3sleyCQjGx8YnJKGhKwRKSGTOzBMpkqsQlpCvrdTtbdBX6PLwUTJQG7BGHRzn9+0x1e3sWIFCKwi62oRAgEF2+xyRwqJxq51A9W8mhwtxGKiunSUnAU9msb2aJhw7lcnBMWgpnGmL0BwNw6AAklhIhs8JJmGw4QJhKdahdEColO5WnNTAoDN1dO5PISHE4XG5PKjfO5NEFgiBJNk4DIGcc+Yi6ogmkolK12pNuu5ev15Qg+jhJZpOEoFNpNFpfG76ctwmsoobqmcTQgsaLNG4vsp8Vi8QTBggo2oTCpzCZdLpcbodJpAlqGThmaywcH+Ui5ELhs400ZXbcLNotA7-s5fPntGZzRoVJqAkA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QBUDyARVBlAdAUQDkBBAIQBk90BidAS1gEMAjAGzAG0AGAXUVAAcA9rFoAXWoIB2fEAA9EAFgDMADhxKFARiVKATAoCsulQDYtBgDQgAnoqUBOHApNLOqk8c0nvJgL6+rNExcQlIKagBVfggGUTAAAkkwAHd40UEIQQByWHiWZjAWLl4kECERcSkZeQQTFU0cThUVJqUDexbnK1sEAHZDHF7epV7NFWGHEYN-QIxsfGJyShpCsDj4hjSMwWKZcrEJaVKavQVBzl1ezgVdTU4DTVGFbsR+k0HNT8mvOvtpgJAQXmoSW1CIEAgGy2mV2pX2lSOoBqJj+OH0ukuqmGWnsSheCAUKiUOAM7QMbQufxUBl6M0Bc1w6AAklgwss8JJmGxYQJhAcqsdFApOB8XG1eiZeqY3PjSQZGhoXAZDDopv4AZIMnAZECsHs+Qjqohbr0PmM2qregZxiZ8W0GvYXG4jM5tL1HXTdQs2eh9RVDkaENbTZoFO7jFKrQYTJYbIgzA1mtiVPZw59PQycMzWaC-fzEXJjTGzUTyTorTb8YZ5d5dJKY5xHSjJerfEA */
     id: "TODOS",
 
     context: {
@@ -93,12 +88,9 @@ export const buildTodosMachine = (todoMachine: TodoMachine) =>
                 type: "Update the new todo label in context",
                 params: ({ event }) => event.label,
               },
-              "React to new todo update",
             ],
-
             target: "ENABLED",
           },
-
           "Delete a todo": {
             actions: [
               {
@@ -109,43 +101,25 @@ export const buildTodosMachine = (todoMachine: TodoMachine) =>
                 type: "Remove todo from context",
                 params: ({ event }) => event.id,
               },
-              {
-                type: "React to todo deletion",
-                params: ({ event }) => event.id,
-              },
             ],
-
             target: "ENABLED",
           },
-
           "Add a todo": {
             guard: {
               type: "new todo's label is valid",
             },
-
-            actions: [
-              "Add a new todo in context",
-              "Reset new todo's label",
-              "React to todo addition",
-            ],
-
+            actions: ["Add a new todo in context", "Reset new todo's label"],
             target: "ENABLED",
           },
         },
-
-        entry: "React to enter ENABLED",
       },
-
       DISABLED: {
         on: {
           Enable: "ENABLED",
         },
-
-        entry: "React to enter DISABLED",
       },
     },
-
-    initial: "ENABLED",
+    initial: "DISABLED",
   });
 
 export type TodosMachine = ReturnType<typeof buildTodosMachine>;

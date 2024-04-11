@@ -11,26 +11,24 @@ export const Todo: React.FC<{
 
   return (
     <div
+      className="todo"
       style={{
         opacity: state.matches({ UPDATE: "SAVING" }) ? 0.5 : 1,
       }}
     >
       <div>
-        <strong>{label}</strong>
-        <form
-          className="todoForm"
-          hidden={!state.hasTag("form")}
-          onSubmit={(event) => {
-            event.preventDefault();
-
-            todoRef.send({ type: "Save todo" });
-          }}
-        >
-          <label className="field" htmlFor="todo.label">
-            <div className="label">Label</div>
+        {state.hasTag("form") ? (
+          <form
+            className="todoForm"
+            hidden={!state.hasTag("form")}
+            onSubmit={(event) => {
+              event.preventDefault();
+              todoRef.send({ type: "Save todo" });
+            }}
+          >
             <input
               type="text"
-              id="todo.label"
+              className="editTodoLabel"
               value={state.context.label}
               onChange={(event) => {
                 todoRef.send({
@@ -39,8 +37,10 @@ export const Todo: React.FC<{
                 });
               }}
             />
-          </label>
-        </form>
+          </form>
+        ) : (
+          <h3>{label}</h3>
+        )}
       </div>
       <div className="actionsCell">
         <div className="actions">
@@ -62,7 +62,7 @@ export const Todo: React.FC<{
               </button>
             </>
           )}
-          {state.hasTag("read") && (
+          {!state.hasTag("form") && (
             <>
               <button onClick={() => todoRef.send({ type: "Edit todo" })}>
                 Edit

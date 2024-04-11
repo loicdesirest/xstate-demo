@@ -57,14 +57,9 @@ export const todoMachine = setup({
     "Set back previous label": assign({
       label: ({ context }) => context.previousLabel,
     }),
-    "React to todo entering READING state": () => {},
-    "React to todo entering EDITING state": () => {},
-    "React to todo entering SAVING state": () => {},
-    "React to todo updating it's label": () => {},
-    "React to todo canceling it's label update": () => {},
   },
 }).createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QBcD2FUGIAiYA2YyYABGhgNoAMAuoqAA6qwCWyzqAdnSAB6IBMlfgDoArAE4AzKKGUAHAHYAjOIBsCyQBoQAT0QBaScMmSFAFnELVq8YspmbkgL5PtZLAGUAhgDcSyADN0VCpaJBBGFjZObj4EJSUZYSVJSiE5VX4zUTN+OW09BH5VSmEFcX5RfgVKoXEXN2DhAFUABWwAQQAVAFFhACUejuwASQA5AHFMHohWUmDQ7kjWdi5wuP1E0rUZDQcshUOCxGsRVTMzRTlxCoUqpQaQdxb27r6e0a7xqeb6CC8iMQ8F4AEb4RbhZbRNagOJ5cTCQRVc5yBJKBSKY4IOSUVTJSRmKziJSVaokx7PNqdXrCD4jL6TTAAYS8HAAxuCaEsmCsYusDKIlGVirjchYCYlxFiLHJEZZroITGk5NkKU0qW9aZ9vphvH55hQuZCedDYogFJRRGJVCS5JJMndJCSsechSVLtIzKl+JJiWqMC9qX0PB0AGo6jAcMDCZgcHyoADW0cprxpIfDkwQsfjbIBq1CEIYJtWZqKJmS6NyGNxolUOSxTtllESFrt2UtCQULlcIA46Dg3Hc3KiJf5CH0xQRWUJyjMlFsOP4WKUZiFgtEyjrql9lDu-H9qGEACEOkyANITfoAeWaY2wxAAMleJhNvsPeTDeIgEvZhHJ+BUJQ7sS8jSnWZSiP+XqoruhyqAegZvO+ppjhO-BCtOhwrvOcg4uiWL8ABwjNhukjVIcxKSHIogIRqNKDMMb7GiOfKwgY6JGJhs44XhCgNkoeLrjYwkVJQpjwT2KZBlq9JMUWLGfnCKTEco5jlCouHWKoLrgWp8hzoR84ErRqbBmGckRMWrFfggmQiBUUG1tBqiovxsriZYAm4RcghmN2ThAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QBcD2FUGIAiYA2YyYABGhgNoAMAuoqAA6qwCWyzqAdnSAB6IBMlfgDoArAE4AzKKGUAHAHYAjOIBsCyQBoQAT0QBaScMmSFAFnELVq8YspmbkgL5PtZLAGUAhgDcSyADN0VCpaJBBGFjZObj4EBXFxMXU5W3N+UXNxbT0Efn4zYXF5fiUzdNVFFzdg4QBVAAVsAEEAFQBRYQAldubsAEkAOQBxTHaIVlJg0O5I1nYucLj9JQVRYQLyhXzKSSVTMzMcxFFRVTF5VSV+SUorYoVqkHd6prbO9oHWodG6+ggvERiHgvAAjfAzcJzaKLUBxaRKYQKbYKORmSinQSHUTHBCiExIuSCSRE2wmU5PF6NFodYSffrfEaYADCXg4AGMITRZkx5jElogysZKOJ0XJMZJVCLxPxcYc5MJFMoZfw5JQpQlKbVqe86V8fphvH4phRuVDeTDYohypQiiZLg4CpJykddNalIiEqozuVTKIlHJnVqMK8aZ0PM0AGoGjAcMDCZgcHyoADW8apb1pEejIwQieT7MBC1CkIYFoWVoQK0Rqj2tky6tJZlErty-HE61V4n2N3bqgs3pcrhAHHQcG47h5UQrAqr-GUG0OyJ2ez9uI9Cu9aiU+JM5kOSmDqGEACFmsyANLDLoAeTqg2wxAAMjfhsMflO+bDeIh0kVUeqZyiHIapaG6CDOkYJLSKYGJikIohHqG7yfpas76PkRibMuxL7PuuKCOcO7booO7IrcqhITqtI9H0H7mtO-JwgYqxYUuyjorYaqrLieznP6ZxqEJxJWFRmYfPqIyoTOzF5AuHYgQU4otuiYG5OUNa7Gs+QyCoYlhsI2b0WWjHfnEYrCLW+SiqSchSqoBFSJZEiqDsljcRoQ5OEAA */
   id: "todo",
   context: ({ input }) => ({
     previousLabel: input.label,
@@ -76,24 +71,19 @@ export const todoMachine = setup({
         src: "Log save operation",
       },
     },
-
     UPDATE: {
       states: {
         READING: {
           tags: ["read"],
-
           on: {
             "Edit todo": {
               target: "EDITING",
               reenter: true,
             },
           },
-
-          entry: "React to todo entering READING state",
         },
         EDITING: {
           tags: ["form"],
-
           on: {
             "Update label": {
               actions: [
@@ -101,32 +91,19 @@ export const todoMachine = setup({
                   type: "Update label in context",
                   params: ({ event }) => event.label,
                 },
-                {
-                  type: "React to todo updating it's label",
-                },
               ],
-
               target: "EDITING",
             },
-
             Cancel: {
               target: "READING",
-
-              actions: [
-                "Set back previous label",
-                "React to todo canceling it's label update",
-              ],
-
+              actions: ["Set back previous label"],
               reenter: true,
             },
-
             "Save todo": {
               target: "SAVING",
               reenter: true,
             },
           },
-
-          entry: "React to todo entering EDITING state",
         },
         SAVING: {
           tags: ["saving"],
@@ -137,10 +114,8 @@ export const todoMachine = setup({
               actions: "Update previous label in context",
             },
           },
-          entry: ["React to todo entering SAVING state"],
         },
       },
-
       initial: "READING",
     },
   },
@@ -153,7 +128,6 @@ export const todoMachine = setup({
         },
       ],
     },
-
     "Save tfodo": ".BACKGROUND LOGGING",
   },
   type: "parallel",
