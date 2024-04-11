@@ -1,14 +1,17 @@
-import { expect, test } from "vitest";
+import { assert, expect, test, vi } from "vitest";
 
 import { TodoSnapshot, todoMachine } from "./todo.machine";
 import { createActor, fromPromise } from "xstate";
-import { i } from "vitest/dist/reporters-P7C2ytIv.js";
 
 test("Edit a todo", () => {
+  const saveTodo = vi.fn(() => async () => {
+    return true;
+  });
   const todoActor = createActor(
     todoMachine.provide({
       actors: {
-        "Save todo": fromPromise(async () => {
+        "Save todo on server": fromPromise(saveTodo as unknown as any),
+        "Log save operation": fromPromise(async () => {
           return true;
         }),
       },
@@ -19,14 +22,12 @@ test("Edit a todo", () => {
   );
 
   function* testPlanBuilder(): Generator<void, void, TodoSnapshot> {
-    console.log("testPlanBuilder");
-
     let snapshot = yield;
-    expect(snapshot.value).toBe("READING");
+    assert.isTrue(snapshot.matches({ UPDATE: "READING" }));
     todoActor.send({ type: "Edit todo" });
 
     snapshot = yield;
-    expect(snapshot.value).toBe("EDITING");
+    assert.isTrue(snapshot.matches({ UPDATE: "EDITING" }));
     todoActor.send({
       type: "Update label",
       label: "Buy milk and eggs",
@@ -38,11 +39,11 @@ test("Edit a todo", () => {
 
     snapshot = yield;
     expect(snapshot.context.label).toBe("Buy milk");
-    expect(snapshot.value).toBe("READING");
-
+    assert.isTrue(snapshot.matches({ UPDATE: "READING" }));
     todoActor.send({ type: "Edit todo" });
+
     snapshot = yield;
-    expect(snapshot.value).toBe("EDITING");
+    assert.isTrue(snapshot.matches({ UPDATE: "EDITING" }));
     todoActor.send({
       type: "Update label",
       label: "Buy milk and eggs",
@@ -53,10 +54,13 @@ test("Edit a todo", () => {
     todoActor.send({ type: "Save todo" });
 
     snapshot = yield;
-    expect(snapshot.value).toBe("SAVING");
+    assert.isTrue(snapshot.matches({ UPDATE: "SAVING" }));
 
     snapshot = yield;
-    expect(snapshot.value).toBe("READING");
+    snapshot = yield;
+
+    expect(saveTodo).toBeCalledTimes(1);
+    assert.isTrue(snapshot.matches({ UPDATE: "READING" }));
     expect(snapshot.context.previousLabel).toBe("Buy milk and eggs");
   }
 
@@ -78,19 +82,4 @@ test("Edit a todo", () => {
 
     todoActor.start();
   });
-
-  // expect(todoActor.getSnapshot().value).toMatch("READING");
-  // todoActor.send({ type: "Edit todo" });
-  // expect(todoActor.getSnapshot().value).toMatch("EDITING");
-  // todoActor.send({ type: "Update label", label: "Buy milk and eggs" });
-  // expect(todoActor.getSnapshot().context.label).toMatch("Buy milk and eggs");
-  // todoActor.send({ type: "Save todo" });
-  // expect(todoActor.getSnapshot().value).toMatch("SAVING");
-  // const a = todoActor.subscribe((state) => {
-  //   expect(todoActor.getSnapshot().value).toMatch("READING");
-  //   expect(todoActor.getSnapshot().context.previousLabel).toMatch(
-  //     "Buy milk and eggs"
-  //   );
-  // });
-  // a.
 });

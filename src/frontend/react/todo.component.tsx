@@ -8,12 +8,11 @@ export const Todo: React.FC<{
 }> = ({ todoRef }) => {
   const state = useSelector(todoRef, (s) => s);
   const { label } = state.context;
-  console.log(state);
 
   return (
     <div
       style={{
-        opacity: state.matches("SAVING") ? 0.5 : 1,
+        opacity: state.matches({ UPDATE: "SAVING" }) ? 0.5 : 1,
       }}
     >
       <div>

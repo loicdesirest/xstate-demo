@@ -52,13 +52,13 @@ export const buildTodosMachine = (todoMachine: TodoMachine) =>
       }),
       "Add a new todo in context": assign({
         todos: ({ context, spawn }) => {
-          let a = spawn("todoMachine", {
+          let todo = spawn("todoMachine", {
             id: `todo-${makeId()}`,
             input: {
               label: context.newTodoLabel,
             },
           });
-          return context.todos.concat(a);
+          return context.todos.concat(todo);
         },
       }),
       "Reset new todo's label": assign({
@@ -74,7 +74,7 @@ export const buildTodosMachine = (todoMachine: TodoMachine) =>
       todoMachine,
     },
   }).createMachine({
-    /** @xstate-layout N4IgpgJg5mDOIC5QBUDyARVBlAdAUQDkBBAIQBk90BiAVQAcIBDAFzAAIA7MAdzeYHsI-AOSw2AG0YAjMOIDaABgC6iUHX6wAls038OqkAA9EAWgCMADgs4A7GYUBWBzYUA2AMyPXDgDQgAnogALEEATDgKoa4AnKHuFgruoTYO0a4Avul+aJi4hKQU1EQQEGyMfIL8iipIIOpaOnoGxgihYTjuDokWrhY2Vgpm0UF+gQg24dE2-aEW9rHuQYmZ2RjY+MTklFTosmCsZRVC1Qb12rr6tS3mbbbRZkGuUc4KQQ4Po4hTOJZ2syl2ByuIIrEA5db5LbUdCaWDScRgE61M6NS6gFpBdzuHDRBzuMyzLHOTHDT4IdzfF5OUJmVJdCzuUHg3DoACSWAK2zwHHhiOUpw05yaV0QcSCtgcFic3R67jsZKC0WsQQSNNlNiSSUyWRAHEEcAMzIFDQuzVMcVctnsThcHi8vgCpjM2IcoRpEwmuOSVjMTLWeU2hWNQrRRkQDxsHU6Ck9oXeSzjZKxZhwcwUCgsIWir3cHhBOuZODZHKhwdRZvJaR+SxsrjcQLiePcCqVOBVkUsHg1cVC2vSQA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QBUDyARVBlAdAUQDkBBAIQBk90BidAS1gEMAjAGzAG0AGAXUVAAcA9rFoAXWoIB2fEAA9EAJgCcARhwqFAZgBsAFk4qVmpQA5OnbQBoQAT0QBWIznudN9gOwnNR+5ve6AXwDrNExcQlIKagBVfggGUTAAAkkwAHck0UEIQQByWCSWZjAWLl4kECERcSkZeQQAWhVHHG1DUxNtJT9tdxUrW0Rde3scbpMJrt0Vd3sleyCQjGx8YnJKGhKwRKSGTOzBMpkqsQlpCvrdTtbdBX6PLwUTJQG7BGHRzn9+0x1e3sWIFCKwi62oRAgEF2+xyRwqJxq51A9W8mhwtxGKiunSUnAU9msb2aJhw7lcnBMWgpnGmL0BwNw6AAklhIhs8JJmGw4QJhKdahdEColO5WnNTAoDN1dO5PISHE4XG5PKjfO5NEFgiBJNk4DIGcc+Yi6ogmkolK12pNuu5ev15Qg+jhJZpOEoFNpNFpfG76ctwmsoobqmcTQgsaLNG4vsp8Vi8QTBggo2oTCpzCZdLpcbodJpAlqGThmaywcH+Ui5ELhs400ZXbcLNotA7-s5fPntGZzRoVJqAkA */
     id: "TODOS",
 
     context: {
