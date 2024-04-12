@@ -59,7 +59,7 @@ export const todoMachine = setup({
     }),
   },
 }).createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QBcD2FUGIAiYA2YyYABGhgNoAMAuoqAA6qwCWyzqAdnSAB6IBMlfgDoArAE4AzKKGUAHAHYAjOIBsCyQBoQAT0QBaScMmSFAFnELVq8YspmbkgL5PtZLAGUAhgDcSyADN0VCpaJBBGFjZObj4EBXFxMXU5W3N+UXNxbT0Efn4zYXF5fiUzdNVFFzdg4QBVAAVsAEEAFQBRYQAldubsAEkAOQBxTHaIVlJg0O5I1nYucLj9JQVRYQLyhXzKSSVTMzMcxFFRVTF5VSV+SUorYoVqkHd6prbO9oHWodG6+ggvERiHgvAAjfAzcJzaKLUBxaRKYQKbYKORmSinQSHUTHBCiExIuSCSRE2wmU5PF6NFodYSffrfEaYADCXg4AGMITRZkx5jElogysZKOJ0XJMZJVCLxPxcYc5MJFMoZfw5JQpQlKbVqe86V8fphvH4phRuVDeTDYohypQiiZLg4CpJykddNalIiEqozuVTKIlHJnVqMK8aZ0PM0AGoGjAcMDCZgcHyoADW8apb1pEejIwQieT7MBC1CkIYFoWVoQK0Rqj2tky6tJZlErty-HE61V4n2N3bqgs3pcrhAHHQcG47h5UQrAqr-GUG0OyJ2ez9uI9Cu9aiU+JM5kOSmDqGEACFmsyANLDLoAeTqg2wxAAMjfhsMflO+bDeIh0kVUeqZyiHIapaG6CDOkYJLSKYGJikIohHqG7yfpas76PkRibMuxL7PuuKCOcO7booO7IrcqhITqtI9H0H7mtO-JwgYqxYUuyjorYaqrLieznP6ZxqEJxJWFRmYfPqIyoTOzF5AuHYgQU4otuiYG5OUNa7Gs+QyCoYlhsI2b0WWjHfnEYrCLW+SiqSchSqoBFSJZEiqDsljcRoQ5OEAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QBcD2FUGIAiYA2YyYABGhgNoAMAuoqAA6qwCWyzqAdnSAB6IC0ATgAcAOgBMAZkEA2cQEZ5lAKzKA7DPmSANCACeA+conjhWgCyDllBWvHjlAX0e6yWAMoBDAG4k3VWiQQRhY2Tm4+BDVBQVFlGTVhETVzBxTBXQMEe3NRQUphBXMU8RlhNWdXdFRRAFUABWwAQQAVAFFRACU2puwASQA5AHFMNohWUmqA7hDWdi4gyP55NWNxc2K7cUpJLRTzTMRVGTiCzSlKDXyKlxA3OsbWjrb+lsGR2voITyJiPE8AEb4aZBWZhBagSKSZTyURqOyJcwqZTbDbKQ4IZSSSRwwo7QoibGqSp3aoPZrtUQvPpvYaYADCng4AGNgTQZkw5uFFoh5LlJJRBEjhKopDJBYJxBiNmJymp5JLTJRxdESfcGhTnq93pgvL5JhR2aDOeCIohipQ8tizuY5OZJMUDvpzYo4bJ4sVJKt5MIHWqyRqnqJ3E0AGo6jAcMCiZgcbyoADW0fVj0pIfDwwQsfjzJ+8wCIIYJvmZoQy1hMl2InUyoJ5mUTqy4isEiSWikzZklhkThJHHQcG4bg5oRLPLL4nlEg28PsOz26OdCEKomk0koBSUkpkgn9GFEACEmvSANJDToAeVqA2wxAAMhehkN3iOuRDeIgSnlEsr4sphMIOwYg6OKSL6WJqCowo2L2VT7oG7Svqa478PYOLrJsc67F6GwYvIO6iEk65dooRK7rcKaal0PT9MMSFjpChhqOhM7ykiIiASswH4XERg7vxko7Boe41AhWo0i+xqjtyjHZFOVgAesIoNkiOhLsUFZCSiDiUAqInkkG6aSUW0nvlCCqiDulgOOUAHVhiaSroIYEcZIdobJIzjOEAA */
   id: "todo",
   context: ({ input }) => ({
     previousLabel: input.label,
@@ -82,6 +82,7 @@ export const todoMachine = setup({
             },
           },
         },
+
         EDITING: {
           tags: ["form"],
           on: {
@@ -105,10 +106,12 @@ export const todoMachine = setup({
             },
           },
         },
+
         SAVING: {
           tags: ["saving"],
           invoke: {
             src: "Save todo on server",
+
             onDone: {
               target: "READING",
               actions: "Update previous label in context",
@@ -128,7 +131,7 @@ export const todoMachine = setup({
         },
       ],
     },
-    "Save tfodo": ".BACKGROUND LOGGING",
+    "Save todo": ".BACKGROUND LOGGING",
   },
   type: "parallel",
 });
